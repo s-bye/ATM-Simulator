@@ -1,4 +1,5 @@
 import sqlite3
+from datetime import datetime
 
 class Transaction:
     def __init__(self, transaction_id, user_id, transaction_type, amount, timestamp):
@@ -16,21 +17,22 @@ class TransactionDAO:
     def __init__(self, db_file="bank_database.sqlite"):
         self.db_file = db_file
 
-    def _connect(self):
+    def connect_db(self):
         return sqlite3.connect(self.db_file)
 
-    def add_transaction(self, transaction):
-        conn = self._connect()
+    def add_transaction(self, user_id, transaction_type, amount):
+        conn = self.connect_db()
         cursor = conn.cursor()
 
-        cursor.execute("""SELECT * FROM transactions WHERE user_id = ? ORDER BY timestamp DESC""", (transaction.user_id,))
-        rows = cursor.fetchall()
+        timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        cursor.execute('''INSERT INTO transactions (user_id, transaction_type, amount, timestamp)
+                      VALUES (?, ?, ?, ?)''', (user_id, transaction_type, amount, timestamp))
 
-        transactions = [Transaction(*row) for row in rows]
-        return transactions
+        conn.commit()
+        conn.close()
 
     def get_transactions_by_user_id(self, user_id):
-        conn = self._connect()
+        conn = self.connect_db()
         cursor = conn.cursor()
 
         cursor.execute("""SELECT * FROM transactions WHERE user_id = ? ORDER BY timestamp DESC""", (user_id,))
@@ -41,13 +43,11 @@ class TransactionDAO:
         return transactions
 
     def get_all_transactions(self):
-        conn = self._connect()
+        conn = self.connect_db()
         cursor = conn.cursor()
 
         cursor.execute("""SELECT * FROM transactions ORDER BY timestamp DESC""")
-        rows = cursor.fetchall()
+        transactions = cursor.fetchall()
         conn.close()
-
-        transactions = [Transaction(*row) for row in rows]
         return transactions
 
