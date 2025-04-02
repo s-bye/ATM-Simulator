@@ -21,3 +21,5 @@ class User:
     def __repr__(self):
         return f"User(user_id={self.user_id}, full_name='{self.full_name}', card_number='{self.card_number}', balance={self.__balance})"
 
+
+
