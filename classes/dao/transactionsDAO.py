@@ -1,14 +1,9 @@
-import sqlite3
 from datetime import datetime
 from classes.transactions import Transaction
+from classes.dao.baseDAO import BaseDAO
 
-class TransactionDAO:
-    def __init__(self, db_file="bank_database.sqlite"):
-        self.db_file = db_file
 
-    def connect_db(self):
-        return sqlite3.connect(self.db_file)
-
+class TransactionDAO(BaseDAO):
     def add_transaction(self, user_id, transaction_type, amount):
         conn = self.connect_db()
         cursor = conn.cursor()

@@ -1,13 +1,9 @@
 import sqlite3
 from datetime import datetime
+from baseDAO import BaseDAO
 
-class LoggingDAO:
-    def __init__(self, db_file="bank_database.sqlite"):
-        self.db_file = db_file
 
-    def connect_db(self):
-        return sqlite3.connect(self.db_file)
-
+class LoggingDAO(BaseDAO):
     def add_log(self, user_id, action):
         conn = self.connect_db()
         cursor = conn.cursor()
