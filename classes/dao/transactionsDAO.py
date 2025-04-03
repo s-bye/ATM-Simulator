@@ -49,15 +49,18 @@ class TransactionDAO(BaseDAO):
             conn.close()
             return "User not found"
 
-        new_balance = user.get_balance() + amount
+        current_balance = self.UserDao.get_balance(card_number)
+        print(f"[DEBUG] Текущий баланс перед депозитом: {current_balance}")
+        new_balance = current_balance + amount
+        print(f"[DEBUG] Новый баланс после депозита: {new_balance}")
         cursor.execute("UPDATE users SET balance = ? WHERE card_number = ?", (new_balance, card_number))
 
         timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         cursor.execute('''INSERT INTO transactions (user_id, transaction_type, amount, timestamp)
-                          VALUES (?, ?, ?, ?)''', (user.user_id, 'deposit', amount, timestamp))
+                          VALUES (?, ?, ?, ?)''', (user.user_id, 'Deposit', amount, timestamp))
         conn.commit()
         conn.close()
-        return "Deposit successful"
+        return f"Deposit successful {amount} added to your account"
 
     def withdraw(self, card_number, amount):
         conn = self.connect_db()
@@ -68,11 +71,15 @@ class TransactionDAO(BaseDAO):
             conn.close()
             return "User not found"
 
-        if user.get_balance() < amount:
+        current_balance = self.UserDao.get_balance(card_number)
+        print(f"[DEBUG] Текущий баланс перед депозитом: {current_balance}")
+        if current_balance < amount:
             conn.close()
             return "Insufficient funds"
 
-        new_balance = user.get_balance() - amount
+        new_balance = current_balance - amount
+        print(f"[DEBUG] Новый баланс после депозита: {new_balance}")
+
         cursor.execute("UPDATE users SET balance = ? WHERE card_number = ?", (new_balance, card_number))
 
         timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
@@ -81,7 +88,7 @@ class TransactionDAO(BaseDAO):
 
         conn.commit()
         conn.close()
-        return "Withdrawal successful"
+        return f"Withdrawal successful {amount} withdrawn from your account"
 
     def transfer_funds(self, sender_card, receiver_card, amount):
         conn = self.connect_db()
@@ -94,12 +101,20 @@ class TransactionDAO(BaseDAO):
             if not sender or not receiver:
                 return "Invalid card number(s)"
 
+            sender_balance = self.UserDao.get_balance(sender_card)
+            receiver_balance = self.UserDao.get_balance(receiver_card)
+            print(f"[DEBUG] Текущий баланс отправителя: {sender_balance}")
+            print(f"[DEBUG] Текущий баланс получателя: {receiver_balance}")
+
             if sender.get_balance() < amount:
                 return "Insufficient funds"
 
-            new_sender_balance = sender.get_balance() - amount
-            new_receiver_balance = receiver.get_balance() + amount
+            new_sender_balance = sender_balance - amount
+            new_receiver_balance = receiver_balance + amount
+            print(f"[DEBUG] Новый баланс отправителя: {new_sender_balance}")
+            print(f"[DEBUG] Новый баланс получателя: {new_receiver_balance}")
 
+            print(f"[DEBUG] Новый баланс отправителя: {new_sender_balance}")
             cursor.execute("UPDATE users SET balance = ? WHERE card_number = ?", (new_sender_balance, sender_card))
             cursor.execute("UPDATE users SET balance = ? WHERE card_number = ?", (new_receiver_balance, receiver_card))
 
@@ -112,9 +127,18 @@ class TransactionDAO(BaseDAO):
                                 VALUES (?, ?, ?, ?)''', (receiver.user_id, 'transfer', amount, now))
 
             conn.commit()
-            return "Transfer successful"
+            return f"Transfer successful {amount} from {sender_card} to {receiver_card}"
         except Exception as e:
             conn.rollback()
             return f"Transfer failed: {str(e)}"
         finally:
             conn.close()
+
+    def delete_all_transactions(self):
+        conn = self.connect_db()
+        cursor = conn.cursor()
+
+        cursor.execute(''' DELETE FROM transactions''')
+        cursor.execute(''' DELETE FROM sqlite_sequence WHERE name = 'transactions' ''')
+        conn.commit()
+        conn.close()
