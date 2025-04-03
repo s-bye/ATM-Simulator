@@ -9,3 +9,9 @@ class Transaction:
     def __repr__(self):
         return f"Transaction(transaction_id={self.transaction_id}, user_id={self.user_id}, " \
                f"transaction_type={self.transaction_type}, amount={self.__amount}, timestamp={self.timestamp})"
+
+    def get_amount(self):
+        return self.__amount
+
+    def set_amount(self, new_amount):
+        self.__amount = new_amount
