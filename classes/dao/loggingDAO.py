@@ -4,6 +4,9 @@ from baseDAO import BaseDAO
 
 
 class LoggingDAO(BaseDAO):
+    def __init__(self, db_file="bank_database.sqlite"):
+        super().__init__(db_file)
+
     def add_log(self, user_id, action):
         conn = self.connect_db()
         cursor = conn.cursor()

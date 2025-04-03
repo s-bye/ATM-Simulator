@@ -3,6 +3,9 @@ from classes.dao.baseDAO import BaseDAO
 
 
 class UserDAO(BaseDAO):
+    def __init__(self, db_file="bank_database.sqlite"):
+        super().__init__(db_file)
+
     def add_user(self, user):
         conn = self.connect_db()
         cursor = conn.cursor()

@@ -4,6 +4,9 @@ from classes.dao.baseDAO import BaseDAO
 
 
 class TransactionDAO(BaseDAO):
+    def __init__(self, db_file="bank_database.sqlite"):
+        super().__init__(db_file)
+
     def add_transaction(self, user_id, transaction_type, amount):
         conn = self.connect_db()
         cursor = conn.cursor()
