@@ -1,6 +1,7 @@
 import sqlite3
 from datetime import datetime
-from baseDAO import BaseDAO
+from classes.dao.baseDAO import BaseDAO
+from classes.logging import Logging
 
 
 class LoggingDAO(BaseDAO):
@@ -26,7 +27,7 @@ class LoggingDAO(BaseDAO):
         rows = cursor.fetchall()
         conn.close()
 
-        logs = [(log_id, user_id, action, timestamp) for log_id, user_id, action, timestamp in rows]
+        logs = [Logging(*row) for row in rows]
         return logs
 
     def get_all_logs(self):
@@ -37,5 +38,22 @@ class LoggingDAO(BaseDAO):
         rows = cursor.fetchall()
         conn.close()
 
-        logs = [(log_id, user_id, action, timestamp) for log_id, user_id, action, timestamp in rows]
+        logs = [Logging(*row) for row in rows]
         return logs
+
+    def delete_logs_by_user_id(self, id):
+        conn = self.connect_db()
+        cursor = conn.cursor()
+
+        cursor.execute(''' DELETE FROM logs WHERE user_id = ? ''', (id,))
+        conn.commit()
+        conn.close()
+
+    def delete_all_logs(self):
+        conn = self.connect_db()
+        cursor = conn.cursor()
+
+        cursor.execute(''' DELETE FROM logs''')
+        cursor.execute(''' DELETE FROM sqlite_sequence WHERE name = 'logs' ''')
+        conn.commit()
+        conn.close()
