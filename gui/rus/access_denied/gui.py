@@ -12,12 +12,9 @@ ASSETS_PATH = OUTPUT_PATH / Path("assets")
 def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
 
-
-window = Tk()
-
-window.geometry("1024x600")
-window.configure(bg = "#FFFFFF")
-
+def show_window_screen(window):
+    for widget in window.winfo_children():
+        widget.destroy()
 
 canvas = Canvas(
     window,
@@ -37,5 +34,5 @@ image_1 = canvas.create_image(
     279.762451171875,
     image=image_image_1
 )
-window.resizable(False, False)
-window.mainloop()
+
+canvas.image_1 = image_image_1
