@@ -14,21 +14,59 @@ def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
 
 def show_window_screen(window):
+    from ..transaction_ok.gui import show_window_screen as show_transaction_ok_screen
+    from ..transaction_denied.gui import show_window_screen as show_transaction_denied
+    from classes.dao.userDAO import UserDAO
+    from classes.dao.transactionsDAO import TransactionDAO
+    from classes.dao.loggingDAO import LoggingDAO
+    from ..menu.gui import show_window_screen as show_menu_screen
+
+
     for widget in window.winfo_children():
         widget.destroy()
 
+    trans_dao = TransactionDAO()
+    user_dao = UserDAO()
+    log_dao = LoggingDAO()
+
+    sender_card = window.card_number
+    sender = user_dao.get_user_by_card(sender_card)
+
     def escape_button(event):
         window.unbind("<Escape>")
-        from ..menu.gui import show_window_screen as show_menu_screen
         show_menu_screen(window)
         print("Menu screen showed")
 
     def enter_button(event):
         window.unbind("<Return>")
-        from ..transaction_ok.gui import show_window_screen as show_transaction_ok_screen
-        # TODO implement functionality for transfer with DB
-        show_transaction_ok_screen(window)
-        print("Transaction OK screen showed")
+
+        receive_card = entry_1.get()
+        amount_text = entry_2.get()
+
+
+        try:
+            amount = float(amount_text)
+
+            if amount < 0:
+                raise ValueError("Amount must be positive")
+
+            if receive_card == sender_card:
+                raise ValueError("You cannot send yourself")
+
+            result = trans_dao.transfer_funds(sender_card, receive_card, amount)
+
+            if 'successful' in result:
+                log_dao.add_log(sender.user_id, f"transfer to {receive_card} - {amount}")
+                show_transaction_ok_screen(window)
+                print("Transfer is successful")
+            else:
+                log_dao.add_log(sender.user_id, f"transfer FAILED to {receive_card} - {amount}")
+                show_transaction_denied(window)
+                print('Transfer is NOT successful')
+
+        except Exception as e:
+            print(f" Error of transfer: {e}")
+            show_transaction_ok_screen(window)
 
     window.bind("<Escape>", escape_button)
     window.bind("<Return>", enter_button)

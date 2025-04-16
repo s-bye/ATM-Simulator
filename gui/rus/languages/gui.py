@@ -3,7 +3,6 @@ from pathlib import Path
 # from tkinter import *
 # Explicit imports to satisfy Flake8
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
-from ..menu.gui import show_window_screen as show_menu_russian_screen
 
 OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / Path("assets")
@@ -16,9 +15,10 @@ def show_window_screen(window):
     for widget in window.winfo_children():
         widget.destroy()
 
-    def show_menu_russian_screens():
-        show_menu_russian_screen(window)
-        print("Russian showed")
+    def show_authentication_screen():
+        from ..authentication.gui import show_window_screen as show_authentication_screen
+        show_authentication_screen(window)
+        print("Authentication showed")
 
     canvas = Canvas(
         window,
@@ -71,7 +71,7 @@ def show_window_screen(window):
         image=button_image_2,
         borderwidth=0,
         highlightthickness=0,
-        command=lambda: show_menu_russian_screens(),
+        command=lambda: show_authentication_screen(),
         relief="flat"
     )
     button_2.place(

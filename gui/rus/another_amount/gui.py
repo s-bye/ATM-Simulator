@@ -13,21 +13,54 @@ def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
 
 def show_window_screen(window):
+    from classes.dao.transactionsDAO import TransactionDAO
+    from classes.dao.userDAO import UserDAO
+    from classes.dao.loggingDAO import LoggingDAO
+
+    from ..menu.gui import show_window_screen as show_menu_screen
+    from ..transaction_ok.gui import show_window_screen as show_transaction_ok_screen
+
+    from ..withdraw.gui import show_window_screen as show_withdraw_screen
+    from ..transaction_ok.gui import show_window_screen as show_transaction_ok_screen
+    from ..transaction_denied.gui import show_window_screen as show_transaction_denied_screen
+
     for widget in window.winfo_children():
         widget.destroy()
 
+    trans_dao = TransactionDAO()
+    user_dao = UserDAO()
+    log_dao = LoggingDAO()
+
+    card = window.card_number
+    user = user_dao.get_user_by_card(card)
+
     def escape_button(event):
         window.unbind("<Escape>")
-        from ..menu.gui import show_window_screen as show_menu_screen
         show_menu_screen(window)
         print("Menu screen showed")
 
     def enter_button(event):
         window.unbind("<Return>")
-        from ..transaction_ok.gui import show_window_screen as show_transaction_ok_screen
-        # TODO implement functionality for withdraw with DB
-        show_transaction_ok_screen(window)
-        print("Transaction OK screen showed")
+        amount_text = entry_1.get()
+        try:
+            amount = float(amount_text)
+
+            if amount <= 0:
+                raise ValueError("Amount must be positive")
+
+            result = trans_dao.withdraw(card, amount)
+
+            if "successful" in result:
+                log_dao.add_log(user.user_id, f"withdraw {amount}")
+                show_transaction_ok_screen(window)
+            else:
+                log_dao.add_log(user.user_id, f"Withdraw failed: {amount}")
+                show_transaction_denied_screen(window)
+
+        except Exception as e:
+            print("Error in input: ", e)
+            log_dao.add_log(user.user_id, f"Withdraw failed: {amount_text}")
+            show_transaction_denied_screen(window)
 
     window.bind("<Escape>", escape_button)
     window.bind("<Return>", enter_button)

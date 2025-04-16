@@ -1,6 +1,15 @@
 # TODO button functions withdraw with DB
 from pathlib import Path
 
+from classes.dao.transactionsDAO import TransactionDAO
+from classes.dao.userDAO import UserDAO
+from classes.dao.loggingDAO import LoggingDAO
+
+from ..transaction_ok.gui import show_window_screen as show_transaction_ok_screen
+from ..transaction_denied.gui import show_window_screen as show_transaction_denied_screen
+from ..another_amount.gui import show_window_screen as show_another_amount_screen
+from ..menu.gui import show_window_screen as show_menu_screen
+
 # from tkinter import *
 # Explicit imports to satisfy Flake8
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
@@ -17,35 +26,46 @@ def show_window_screen(window):
     for widget in window.winfo_children():
         widget.destroy()
 
+
+    trans_dao = TransactionDAO()
+    user_dao = UserDAO()
+    log_dao = LoggingDAO()
+
+    card = window.card_number
+    user = user_dao.get_user_by_card(card)
+
+    def handle_withdraw(amount):
+        result = trans_dao.withdraw(card, amount)
+        if 'successful' in result:
+            log_dao.add_log(user.user_id, f'withdraw {amount}')
+            show_transaction_ok_screen(window)
+        else:
+            log_dao.add_log(user.user_id, f'withdraw failed: {amount}')
+            show_transaction_denied_screen(window)
+
     def som_2000():
-        print("2000 som withdraw")
+        handle_withdraw(2000)
 
     def som_1000():
-        print("1000 som withdraw")
+        handle_withdraw(1000)
 
     def som_500():
-        print("500 som withdraw")
+        handle_withdraw(500)
 
     def som_200():
-        print("200 som withdraw")
+        handle_withdraw(200)
 
     def som_5000():
-        print("5000 som withdraw")
+        handle_withdraw(5000)
 
     def som_8000():
-        print("8000 som withdraw")
+        handle_withdraw(8000)
 
     def som_10000():
-        print("10000 som withdraw")
-
-    def another_amount_button():
-        from ..another_amount.gui import show_window_screen as show_another_amount_screen
-        show_another_amount_screen(window)
-        print("Another amount showed")
+        handle_withdraw(10000)
 
     def escape_button(event):
         window.unbind("<Escape>")
-        from ..menu.gui import show_window_screen as show_menu_screen
         show_menu_screen(window)
         print("Menu screen showed")
 
@@ -188,7 +208,7 @@ def show_window_screen(window):
         image=button_image_8,
         borderwidth=0,
         highlightthickness=0,
-        command=lambda: another_amount_button(),
+        command=lambda: show_another_amount_screen(window),
         relief="flat"
     )
     button_8.place(
