@@ -23,7 +23,7 @@ def show_window_screen(window):
     for widget in window.winfo_children():
         widget.destroy()
 
-    user_dao = UserDAO(0)
+    user_dao = UserDAO()
     log_dao = LoggingDAO()
 
     card = window.card_number
