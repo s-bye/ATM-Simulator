@@ -14,12 +14,21 @@ ASSETS_PATH = OUTPUT_PATH / Path("assets")
 def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
 
+def limit_card_number_length(value):
+    return len(value) <= 16
+
+def limit_pin_length(value):
+    return len(value) <= 4
+
 def show_window_screen(window):
     user_dao = UserDAO()
     window.login_attempts = 3
 
     for widget in window.winfo_children():
         widget.destroy()
+
+    vcmd_card_number = window.register(limit_card_number_length)
+    vcmd_pin = window.register(limit_pin_length)
 
     def on_enter_pressed(event=None):
         card = entry_1.get()
@@ -66,6 +75,8 @@ def show_window_screen(window):
         bd=0,
         bg="#D6D6D6",
         fg="#000716",
+        validate="key",
+        validatecommand=(vcmd_card_number, "%P"),
         highlightthickness=0
     )
     entry_1.place(
@@ -73,6 +84,11 @@ def show_window_screen(window):
         y=342.0,
         width=353.0,
         height=82.0
+    )
+
+    entry_1.configure(
+        font=("Merriweather", 24),
+        justify="center"
     )
 
     entry_image_2 = PhotoImage(
@@ -86,6 +102,8 @@ def show_window_screen(window):
         bd=0,
         bg="#D6D6D6",
         fg="#000716",
+        validate="key",
+        validatecommand=(vcmd_pin, "%P"),
         highlightthickness=0
     )
     entry_2.place(
@@ -93,6 +111,12 @@ def show_window_screen(window):
         y=481.0,
         width=353.0,
         height=82.0
+    )
+
+    entry_2.configure(
+        font=("Merriweather", 24),
+        justify="center",
+
     )
 
     canvas.create_rectangle(
