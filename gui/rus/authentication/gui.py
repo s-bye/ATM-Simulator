@@ -104,7 +104,7 @@ def show_window_screen(window):
             else:
                 window.login_attempts -= 1
                 entry_2.configure(bg="#FF0000")
-                show_pin_warning("Incorrect PIN")
+                show_pin_warning(f"Incorrect PIN ({window.login_attempts} attempts left)")
                 print(f"Login attempts left: {window.login_attempts}")  # TODO add to gui
                 if window.login_attempts == 0:
                     show_access_denied_screen(window)
