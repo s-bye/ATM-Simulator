@@ -30,20 +30,89 @@ def show_window_screen(window):
     vcmd_card_number = window.register(limit_card_number_length)
     vcmd_pin = window.register(limit_pin_length)
 
+    # Initialize warning message IDs
+    window.card_warning_id = None
+    window.pin_warning_id = None
+
+    def show_card_warning(message):
+        if window.card_warning_id:
+            canvas.delete(window.card_warning_id)
+        window.card_warning_id = canvas.create_text(
+            529.5,
+            437.0,
+            text=message,
+            font=("Merriweather", 14),
+            fill="#FF0000",
+            anchor="center"
+        )
+
+    def clear_card_warning(event=None):
+        if window.card_warning_id:
+            canvas.delete(window.card_warning_id)
+            window.card_warning_id = None
+
+    def show_pin_warning(message):
+        if window.pin_warning_id:
+            canvas.delete(window.pin_warning_id)
+        window.pin_warning_id = canvas.create_text(
+            529.5,
+            580.0,
+            text=message,
+            font=("Merriweather", 14),
+            fill="#FF0000",
+            anchor="center"
+        )
+
+    def clear_pin_warning(event=None):
+        if window.pin_warning_id:
+            canvas.delete(window.pin_warning_id)
+            window.pin_warning_id = None
+
     def on_enter_pressed(event=None):
         card = entry_1.get()
         pin = entry_2.get()
+
+        # Clear previous warnings
+        clear_card_warning()
+        clear_pin_warning()
+
+        # Validate card number
+        if len(card) == 0:
+            show_card_warning("Card number cannot be empty")
+            return
+        elif len(card) < 16:
+            show_card_warning("Card number must be 16 digits")
+            return
+        else:
+            entry_1.configure(bg="#D6D6D6")
+
+        # Validate PIN
+        if len(pin) == 0:
+            show_pin_warning("PIN cannot be empty")
+            return
+        elif len(pin) < 4:
+            show_pin_warning("PIN must be 4 digits")
+            return
+        else:
+            entry_2.configure(bg="#D6D6D6")
+
         try:
             if user_dao.check_pin(card, int(pin)):
                 window.card_number = card
+                entry_2.configure(bg="#D6D6D6")
                 show_menu_screen(window)
             else:
                 window.login_attempts -= 1
+                entry_2.configure(bg="#FF0000")
+                show_pin_warning("Incorrect PIN")
                 print(f"Login attempts left: {window.login_attempts}")  # TODO add to gui
                 if window.login_attempts == 0:
                     show_access_denied_screen(window)
         except Exception as e:
+            entry_2.configure(bg="#FF0000")
+            show_pin_warning("Invalid input")
             show_access_denied_screen(window)
+
     def escape_button(event):
         window.unbind("<Escape>")
         from ..idle.gui import show_window_screen as show_idle_screen
@@ -55,15 +124,15 @@ def show_window_screen(window):
 
     canvas = Canvas(
         window,
-        bg = "#FFFFFF",
-        height = 600,
-        width = 1024,
-        bd = 0,
-        highlightthickness = 0,
-        relief = "ridge"
+        bg="#FFFFFF",
+        height=600,
+        width=1024,
+        bd=0,
+        highlightthickness=0,
+        relief="ridge"
     )
 
-    canvas.place(x = 0, y = 0)
+    canvas.place(x=0, y=0)
     entry_image_1 = PhotoImage(
         file=relative_to_assets("entry_1.png"))
     entry_bg_1 = canvas.create_image(
@@ -90,6 +159,7 @@ def show_window_screen(window):
         font=("Merriweather", 24),
         justify="center"
     )
+    entry_1.bind("<Key>", clear_card_warning)  # Clear warning on typing
 
     entry_image_2 = PhotoImage(
         file=relative_to_assets("entry_2.png"))
@@ -116,8 +186,8 @@ def show_window_screen(window):
     entry_2.configure(
         font=("Merriweather", 24),
         justify="center",
-
     )
+    entry_2.bind("<Key>", clear_pin_warning)  # Clear warning on typing
 
     canvas.create_rectangle(
         1.0,
@@ -125,7 +195,8 @@ def show_window_screen(window):
         1028.0018310546875,
         100.0,
         fill="#000000",
-        outline="")
+        outline=""
+    )
 
     image_image_1 = PhotoImage(
         file=relative_to_assets("image_1.png"))
