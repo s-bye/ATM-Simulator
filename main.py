@@ -6,6 +6,7 @@ if __name__ == "__main__":
     window.geometry("1024x600")
     window.configure(bg="#FFFFFF")
     window.title("FaceIT - ATM")
+    window.iconbitmap("gui/assets/icon.ico")
     window.resizable(False, False)
 
     show_window_screen(window)
