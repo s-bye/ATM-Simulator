@@ -1,13 +1,9 @@
 from pathlib import Path
-
-# from tkinter import *
-# Explicit imports to satisfy Flake8
+from classes.dao.userDAO import UserDAO
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
-
 
 OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / Path("assets")
-
 
 def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
@@ -18,6 +14,10 @@ def show_window_screen(window):
     for widget in window.winfo_children():
         widget.destroy()
 
+    user_dao = UserDAO()
+    card = window.card_number
+    user = user_dao.get_user_by_card(card)
+    balance = user_dao.get_balance(card) if user else "N/A"
 
     def escape_button(event):
         window.unbind("<Escape>")
@@ -34,31 +34,32 @@ def show_window_screen(window):
 
     canvas = Canvas(
         window,
-        bg = "#FFFFFF",
-        height = 600,
-        width = 1024,
-        bd = 0,
-        highlightthickness = 0,
-        relief = "ridge"
+        bg="#FFFFFF",
+        height=600,
+        width=1024,
+        bd=0,
+        highlightthickness=0,
+        relief="ridge"
     )
 
-    canvas.place(x = 0, y = 0)
+    canvas.place(x=0, y=0)
     canvas.create_text(
-        396.0,
+        512.0,  # Center horizontally (1024 / 2)
         171.0,
-        anchor="nw",
+        anchor="center",
         text="Доступные средства",
         fill="#000000",
         font=("Merriweather Bold", 24 * -1)
     )
 
+    # Display the balance in the center of the window
     canvas.create_text(
-        518.0,
-        253.0,
-        anchor="nw",
-        text=" ",
+        512.0,  # Center horizontally (1024 / 2)
+        300.0,  # Center vertically (600 / 2)
+        anchor="center",
+        text=f"{balance:.1f} сом" if balance != "N/A" else "N/A",
         fill="#000000",
-        font=("Merriweather Bold", 24 * -1)
+        font=("Merriweather Bold", 32 * -1)
     )
 
     image_image_1 = PhotoImage(
