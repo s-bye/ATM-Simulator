@@ -3,7 +3,7 @@ from pathlib import Path
 # from tkinter import *
 # Explicit imports to satisfy Flake8
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
-
+from model import Model
 
 
 OUTPUT_PATH = Path(__file__).parent
@@ -24,12 +24,10 @@ def show_window_screen(window):
     for widget in window.winfo_children():
         widget.destroy()
 
-    trans_dao = TransactionDAO()
-    user_dao = UserDAO()
-    log_dao = LoggingDAO()
+    model = Model()
 
     card = window.card_number
-    user = user_dao.get_user_by_card(card)
+    user = model.get_user_by_card(card)
 
     def escape_button(event):
         window.unbind("<Escape>")
@@ -42,14 +40,14 @@ def show_window_screen(window):
             amount = float(entry_1.get())
             if amount <= 0:
                 raise ValueError("Amount must be positive")
-            result = trans_dao.deposit(card, amount)
+            result = model.deposit(card, amount)
 
             if "successful" in result:
-                log_dao.add_log(user.user_id, f"deposit {amount}")
+                model.add_log(user.user_id, f"deposit {amount}")
                 show_transaction_ok_screen(window)
                 print("Deposit successful")
             else:
-                log_dao.add_log(user.user_id, f"Deposit failed: {amount}")
+                model.add_log(user.user_id, f"Deposit failed: {amount}")
                 show_transaction_ok_screen(window)
                 print("Deposit failed")
 

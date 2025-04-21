@@ -3,6 +3,7 @@ from pathlib import Path
 # from tkinter import *
 # Explicit imports to satisfy Flake8
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
+from model import Model
 
 
 OUTPUT_PATH = Path(__file__).parent
@@ -23,11 +24,10 @@ def show_window_screen(window):
     for widget in window.winfo_children():
         widget.destroy()
 
-    user_dao = UserDAO()
-    log_dao = LoggingDAO()
+    model = Model()
 
     card = window.card_number
-    user = user_dao.get_user_by_card(card)
+    user = model.get_user_by_card(card)
 
     def escape_button(event):
         window.unbind("<Escape>")
@@ -45,13 +45,13 @@ def show_window_screen(window):
             if len(new_pin) != 4:
                 raise ValueError("New PIN must contain 4 numbers")
 
-            user_dao.update_pin(user.user_id, int(new_pin))
-            log_dao.add_log(user.user_id, f"PIN changed")
+            model.update_pin(user.user_id, int(new_pin))
+            model.add_log(user.user_id, f"PIN changed")
          ##TODO: must be changed to show_pin_changed_ok_screen()
             show_transaction_ok_screen(window)
         except Exception as e:
             print("Error of changing PIN: ", e)
-            log_dao.add_log(user.user_id, f"PIN changed failed")
+            model.add_log(user.user_id, f"PIN changed failed")
             ##TODO: must be changed to show_pin_changed_denied_screen()
             show_transaction_denied_screen(window)
 

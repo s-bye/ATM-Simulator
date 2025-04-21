@@ -8,6 +8,7 @@ from ..eng_transaction_ok.gui import show_window_screen as show_transaction_ok_s
 from ..eng_transaction_denied.gui import show_window_screen as show_transaction_denied_screen
 from ..eng_another_amount.gui import show_window_screen as show_another_amount_screen
 from ..eng_menu.gui import show_window_screen as show_menu_screen
+from model import Model
 
 # from tkinter import *
 # Explicit imports to satisfy Flake8
@@ -25,20 +26,18 @@ def show_window_screen(window):
     for widget in window.winfo_children():
         widget.destroy()
 
-    trans_dao = TransactionDAO()
-    user_dao = UserDAO()
-    log_dao = LoggingDAO()
+    model = Model()
 
     card = window.card_number
-    user = user_dao.get_user_by_card(card)
+    user = model.get_user_by_card(card)
 
     def handle_withdraw(amount):
-        result = trans_dao.withdraw(card, amount)
+        result = model.withdraw(card, amount)
         if 'successful' in result:
-            log_dao.add_log(user.user_id, f'withdraw {amount}')
+            model.add_log(user.user_id, f'withdraw {amount}')
             show_transaction_ok_screen(window)
         else:
-            log_dao.add_log(user.user_id, f'withdraw failed: {amount}')
+            model.add_log(user.user_id, f'withdraw failed: {amount}')
             show_transaction_denied_screen(window)
 
     def som_2000():

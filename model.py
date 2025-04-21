@@ -90,3 +90,5 @@ class Model:
 
     def add_log(self, user_id, action):
         self.logging_dao.add_log(user_id, action)
+    def update_pin(self, user_id, new_pin):
+        self.user_dao.update_pin(user_id, new_pin)

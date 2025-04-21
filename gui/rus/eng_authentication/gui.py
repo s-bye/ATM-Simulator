@@ -7,6 +7,7 @@ from tkinter.font import Font
 from classes.dao.userDAO import UserDAO
 from ..eng_menu.gui import show_window_screen as show_menu_screen
 from ..eng_access_denied.gui import show_window_screen as show_access_denied_screen
+from model import Model
 
 OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / Path("assets")
@@ -22,7 +23,7 @@ def limit_pin_length(value):
     return len(value) <= 4
 
 def show_window_screen(window):
-    user_dao = UserDAO()
+    model = Model()
     window.login_attempts = 3
 
     for widget in window.winfo_children():
@@ -94,7 +95,7 @@ def show_window_screen(window):
             entry_2.configure(bg="#D6D6D6")
 
         try:
-            if user_dao.check_pin(card, int(pin)):
+            if model.check_pin(card, int(pin)):
                 window.card_number = card
                 entry_2.configure(bg="#D6D6D6")
                 show_menu_screen(window)

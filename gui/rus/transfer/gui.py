@@ -4,7 +4,7 @@ from pathlib import Path
 # from tkinter import *
 # Explicit imports to satisfy Flake8
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
-
+from model import Model
 
 OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / Path("assets")
@@ -25,12 +25,10 @@ def show_window_screen(window):
     for widget in window.winfo_children():
         widget.destroy()
 
-    trans_dao = TransactionDAO()
-    user_dao = UserDAO()
-    log_dao = LoggingDAO()
+    model = Model()
 
     sender_card = window.card_number
-    sender = user_dao.get_user_by_card(sender_card)
+    sender = model.get_user_by_card(sender_card)
 
     def escape_button(event):
         window.unbind("<Escape>")
@@ -53,14 +51,14 @@ def show_window_screen(window):
             if receive_card == sender_card:
                 raise ValueError("You cannot send yourself")
 
-            result = trans_dao.transfer_funds(sender_card, receive_card, amount)
+            result = model.transfer_funds(sender_card, receive_card, amount)
 
             if 'successful' in result:
-                log_dao.add_log(sender.user_id, f"transfer to {receive_card} - {amount}")
+                model.add_log(sender.user_id, f"transfer to {receive_card} - {amount}")
                 show_transaction_ok_screen(window)
                 print("Transfer is successful")
             else:
-                log_dao.add_log(sender.user_id, f"transfer FAILED to {receive_card} - {amount}")
+                model.add_log(sender.user_id, f"transfer FAILED to {receive_card} - {amount}")
                 show_transaction_denied(window)
                 print('Transfer is NOT successful')
 

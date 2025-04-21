@@ -1,6 +1,7 @@
 from pathlib import Path
 from classes.dao.userDAO import UserDAO
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
+from model import Model
 
 OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / Path("assets")
@@ -14,10 +15,10 @@ def show_window_screen(window):
     for widget in window.winfo_children():
         widget.destroy()
 
-    user_dao = UserDAO()
+    model = Model()
     card = window.card_number
-    user = user_dao.get_user_by_card(card)
-    balance = user_dao.get_balance(card) if user else "N/A"
+    user = model.get_user_by_card(card)
+    balance = model.get_balance(card) if user else "N/A"
 
     def escape_button(event):
         window.unbind("<Escape>")

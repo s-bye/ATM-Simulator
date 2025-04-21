@@ -3,6 +3,7 @@ from pathlib import Path
 # from tkinter import *
 # Explicit imports to satisfy Flake8
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, font
+from model import Model
 
 OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / Path("assets")
@@ -28,12 +29,10 @@ def show_window_screen(window):
 
     vcmd_amount = window.register(limit_amount_length)
 
-    trans_dao = TransactionDAO()
-    user_dao = UserDAO()
-    log_dao = LoggingDAO()
+    model = Model()
 
     card = window.card_number
-    user = user_dao.get_user_by_card(card)
+    user = model.get_user_by_card(card)
 
     def escape_button(event):
         window.unbind("<Escape>")
@@ -49,18 +48,18 @@ def show_window_screen(window):
             if amount <= 0:
                 raise ValueError("Amount must be positive")
 
-            result = trans_dao.withdraw(card, amount)
+            result = model.withdraw(card, amount)
 
             if "successful" in result:
-                log_dao.add_log(user.user_id, f"withdraw {amount}")
+                model.add_log(user.user_id, f"withdraw {amount}")
                 show_transaction_ok_screen(window)
             else:
-                log_dao.add_log(user.user_id, f"Withdraw failed: {amount}")
+                model.add_log(user.user_id, f"Withdraw failed: {amount}")
                 show_transaction_denied_screen(window)
 
         except Exception as e:
             print("Error in input: ", e)
-            log_dao.add_log(user.user_id, f"Withdraw failed: {amount_text}")
+            model.add_log(user.user_id, f"Withdraw failed: {amount_text}")
             show_transaction_denied_screen(window)
 
     window.bind("<Escape>", escape_button)
