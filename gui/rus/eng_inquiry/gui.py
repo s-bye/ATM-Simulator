@@ -9,7 +9,7 @@ def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
 
 def show_window_screen(window):
-    from ..menu.gui import show_window_screen as show_menu_screen
+    from ..eng_menu.gui import show_window_screen as show_menu_screen
 
     for widget in window.winfo_children():
         widget.destroy()
@@ -34,31 +34,31 @@ def show_window_screen(window):
 
     canvas = Canvas(
         window,
-        bg="#FFFFFF",
-        height=600,
-        width=1024,
-        bd=0,
-        highlightthickness=0,
-        relief="ridge"
+        bg = "#FFFFFF",
+        height = 600,
+        width = 1024,
+        bd = 0,
+        highlightthickness = 0,
+        relief = "ridge"
     )
 
-    canvas.place(x=0, y=0)
+    canvas.place(x = 0, y = 0)
     canvas.create_text(
-        512.0,  # Center horizontally (1024 / 2)
+        431.0,
         171.0,
-        anchor="center",
-        text="Доступные средства",
+        anchor="nw",
+        text="Available means",
         fill="#000000",
         font=("Merriweather Bold", 24 * -1)
     )
 
     canvas.create_text(
-        512.0,
-        300.0,
-        anchor="center",
-        text=f"{balance:.1f} сом" if balance != "N/A" else "N/A",
+        518.0,
+        253.0,
+        anchor="nw",
+        text=" ",
         fill="#000000",
-        font=("Merriweather Bold", 32 * -1)
+        font=("Merriweather Bold", 24 * -1)
     )
 
     image_image_1 = PhotoImage(
@@ -68,5 +68,4 @@ def show_window_screen(window):
         302.7626953125,
         image=image_image_1
     )
-
     canvas.image_1 = image_image_1
