@@ -1,4 +1,3 @@
-# TODO Exceptions
 from pathlib import Path
 
 # from tkinter import *
@@ -14,12 +13,12 @@ def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
 
 def show_window_screen(window):
-    from ..transaction_ok.gui import show_window_screen as show_transaction_ok_screen
-    from ..transaction_denied.gui import show_window_screen as show_transaction_denied
+    from ..eng_transaction_ok.gui import show_window_screen as show_transaction_ok_screen
+    from ..eng_transaction_denied.gui import show_window_screen as show_transaction_denied
     from classes.dao.userDAO import UserDAO
     from classes.dao.transactionsDAO import TransactionDAO
     from classes.dao.loggingDAO import LoggingDAO
-    from ..menu.gui import show_window_screen as show_menu_screen
+    from ..eng_menu.gui import show_window_screen as show_menu_screen
 
 
     for widget in window.winfo_children():
@@ -91,28 +90,28 @@ def show_window_screen(window):
     )
 
     canvas.create_text(
-        430.0,
+        475.0,
         166.0,
         anchor="nw",
-        text="Введите данные",
+        text="Enter data",
         fill="#000000",
         font=("Merriweather Bold", 24 * -1)
     )
 
     canvas.create_text(
-        351.0,
+        355.0,
         232.0,
         anchor="nw",
-        text="Номер карты:",
+        text="Card Number:",
         fill="#000000",
         font=("Merriweather Regular", 16 * -1)
     )
 
     canvas.create_text(
-        351.0,
+        352.0,
         374.0,
         anchor="nw",
-        text="Сумма перевода:",
+        text="Transfer Amount:",
         fill="#000000",
         font=("Merriweather Regular", 16 * -1)
     )
@@ -136,7 +135,6 @@ def show_window_screen(window):
         bd=0,
         bg="#D6D6D6",
         fg="#000716",
-        font=("Merriweather", 24),
         highlightthickness=0
     )
     entry_1.place(
@@ -144,9 +142,6 @@ def show_window_screen(window):
         y=261.0,
         width=353.0,
         height=82.0
-    )
-    entry_1.configure(
-        justify="center"
     )
 
     entry_image_2 = PhotoImage(
@@ -160,7 +155,6 @@ def show_window_screen(window):
         bd=0,
         bg="#D6D6D6",
         fg="#000716",
-        font=("Merriweather", 24),
         highlightthickness=0
     )
     entry_2.place(
@@ -169,8 +163,4 @@ def show_window_screen(window):
         width=353.0,
         height=82.0
     )
-    entry_2.configure(
-        justify="center"
-    )
-
     canvas.image_1 = image_image_1
