@@ -5,9 +5,8 @@ from pathlib import Path
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
 from tkinter.font import Font
 from classes.dao.userDAO import UserDAO
-from ..menu.gui import show_window_screen as show_menu_screen
-from ..access_denied.gui import show_window_screen as show_access_denied_screen
-from model import Model
+from ..eng_menu.gui import show_window_screen as show_menu_screen
+from ..eng_access_denied.gui import show_window_screen as show_access_denied_screen
 
 OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / Path("assets")
@@ -23,7 +22,7 @@ def limit_pin_length(value):
     return len(value) <= 4
 
 def show_window_screen(window):
-    model = Model()
+    user_dao = UserDAO()
     window.login_attempts = 3
 
     for widget in window.winfo_children():
@@ -77,26 +76,25 @@ def show_window_screen(window):
         clear_pin_warning()
 
         if len(card) == 0:
-            show_card_warning("Номер карты не может быть пустым")
+            show_card_warning("Card number cannot be empty")
             return
         elif len(card) < 16:
-            show_card_warning("Номер карты должен содержать 16 цифр")
+            show_card_warning("Card number must be 16 digits")
             return
         else:
             entry_1.configure(bg="#D6D6D6")
 
-        # Validate PIN
         if len(pin) == 0:
-            show_pin_warning("Пин-код не может быть пустым")
+            show_pin_warning("PIN cannot be empty")
             return
         elif len(pin) < 4:
-            show_pin_warning("Пин-код должен содержать 4 цифры")
+            show_pin_warning("PIN must be 4 digits")
             return
         else:
             entry_2.configure(bg="#D6D6D6")
 
         try:
-            if model.check_pin(card, int(pin)):
+            if user_dao.check_pin(card, int(pin)):
                 window.card_number = card
                 entry_2.configure(bg="#D6D6D6")
                 show_menu_screen(window)
@@ -123,15 +121,15 @@ def show_window_screen(window):
 
     canvas = Canvas(
         window,
-        bg="#FFFFFF",
-        height=600,
-        width=1024,
-        bd=0,
-        highlightthickness=0,
-        relief="ridge"
+        bg = "#FFFFFF",
+        height = 600,
+        width = 1024,
+        bd = 0,
+        highlightthickness = 0,
+        relief = "ridge"
     )
 
-    canvas.place(x=0, y=0)
+    canvas.place(x = 0, y = 0)
     entry_image_1 = PhotoImage(
         file=relative_to_assets("entry_1.png"))
     entry_bg_1 = canvas.create_image(
@@ -143,9 +141,6 @@ def show_window_screen(window):
         bd=0,
         bg="#D6D6D6",
         fg="#000716",
-        validate="key",
-        font=("Merriweather", 24),
-        validatecommand=(vcmd_card_number, "%P"),
         highlightthickness=0
     )
     entry_1.place(
@@ -155,10 +150,6 @@ def show_window_screen(window):
         height=82.0
     )
 
-    entry_1.configure(
-        justify="center"
-    )
-    entry_1.bind("<Key>", clear_card_warning)
     entry_image_2 = PhotoImage(
         file=relative_to_assets("entry_2.png"))
     entry_bg_2 = canvas.create_image(
@@ -170,9 +161,6 @@ def show_window_screen(window):
         bd=0,
         bg="#D6D6D6",
         fg="#000716",
-        validate="key",
-        font=("Merriweather", 24),
-        validatecommand=(vcmd_pin, "%P"),
         highlightthickness=0
     )
     entry_2.place(
@@ -182,20 +170,13 @@ def show_window_screen(window):
         height=82.0
     )
 
-    entry_2.configure(
-        font=("Merriweather", 24),
-        justify="center",
-    )
-    entry_2.bind("<Key>", clear_pin_warning)
-
     canvas.create_rectangle(
         1.0,
         99.0,
         1028.0018310546875,
         100.0,
         fill="#000000",
-        outline=""
-    )
+        outline="")
 
     image_image_1 = PhotoImage(
         file=relative_to_assets("image_1.png"))

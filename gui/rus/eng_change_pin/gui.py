@@ -3,7 +3,8 @@ from pathlib import Path
 # from tkinter import *
 # Explicit imports to satisfy Flake8
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
-from model import Model
+
+
 OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / Path("assets")
 
@@ -12,24 +13,21 @@ def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
 
 def show_window_screen(window):
-    from classes.dao.transactionsDAO import TransactionDAO
+    from ..eng_menu.gui import show_window_screen as show_menu_screen
+    from ..eng_transaction_ok.gui import show_window_screen as show_transaction_ok_screen
+    from ..eng_transaction_denied.gui import show_window_screen as show_transaction_denied_screen
     from classes.dao.userDAO import UserDAO
     from classes.dao.loggingDAO import LoggingDAO
-
-    from ..menu.gui import show_window_screen as show_menu_screen
-    from ..transaction_ok.gui import show_window_screen as show_transaction_ok_screen
-
-    from ..withdraw.gui import show_window_screen as show_withdraw_screen
-    from ..transaction_ok.gui import show_window_screen as show_transaction_ok_screen
-    from ..transaction_denied.gui import show_window_screen as show_transaction_denied_screen
+    from classes.dao.transactionsDAO import TransactionDAO
 
     for widget in window.winfo_children():
         widget.destroy()
 
-    model = Model()
+    user_dao = UserDAO()
+    log_dao = LoggingDAO()
 
     card = window.card_number
-    user = model.get_user_by_card(card)
+    user = user_dao.get_user_by_card(card)
 
     def escape_button(event):
         window.unbind("<Escape>")
@@ -38,25 +36,21 @@ def show_window_screen(window):
 
     def enter_button(event):
         window.unbind("<Return>")
-        amount_text = entry_1.get()
+        new_pin = entry_1.get().strip()
+
         try:
-            amount = float(amount_text)
+            if not new_pin.isdigit():
+                raise ValueError("PIN must be a digit")
 
-            if amount <= 0:
-                raise ValueError("Amount must be positive")
+            if len(new_pin) != 4:
+                raise ValueError("New PIN must contain 4 numbers")
 
-            result = model.withdraw(card, amount)
-
-            if "successful" in result:
-                model.add_log(user.user_id, f"withdraw {amount}")
-                show_transaction_ok_screen(window)
-            else:
-                model.add_log(user.user_id, f"Withdraw failed: {amount}")
-                show_transaction_denied_screen(window)
-
+            user_dao.update_pin(user.user_id, int(new_pin))
+            log_dao.add_log(user.user_id, f"PIN changed")
+            show_transaction_ok_screen(window)
         except Exception as e:
-            print("Error in input: ", e)
-            model.add_log(user.user_id, f"Withdraw failed: {amount_text}")
+            print("Error of changing PIN: ", e)
+            log_dao.add_log(user.user_id, f"PIN changed failed")
             show_transaction_denied_screen(window)
 
     window.bind("<Escape>", escape_button)
@@ -73,6 +67,15 @@ def show_window_screen(window):
     )
 
     canvas.place(x = 0, y = 0)
+    canvas.create_text(
+        352.0,
+        310.0,
+        anchor="nw",
+        text="Enter Your New PIN",
+        fill="#000000",
+        font=("Merriweather Black", 32 * -1)
+    )
+
     canvas.create_rectangle(
         1.0,
         99.0,
@@ -81,11 +84,19 @@ def show_window_screen(window):
         fill="#000000",
         outline="")
 
+    image_image_1 = PhotoImage(
+        file=relative_to_assets("image_1.png"))
+    image_1 = canvas.create_image(
+        510.73681640625,
+        302.762451171875,
+        image=image_image_1
+    )
+
     entry_image_1 = PhotoImage(
         file=relative_to_assets("entry_1.png"))
     entry_bg_1 = canvas.create_image(
-        529.5,
-        300.0,
+        512.5,
+        423.0,
         image=entry_image_1
     )
     entry_1 = Entry(
@@ -95,18 +106,10 @@ def show_window_screen(window):
         highlightthickness=0
     )
     entry_1.place(
-        x=353.0,
-        y=258.0,
-        width=353.0,
-        height=82.0
-    )
-
-    image_image_1 = PhotoImage(
-        file=relative_to_assets("image_1.png"))
-    image_1 = canvas.create_image(
-        514.73681640625,
-        298.7626953125,
-        image=image_image_1
+        x=372.0,
+        y=373.0,
+        width=281.0,
+        height=98.0
     )
 
     canvas.image_1 = image_image_1

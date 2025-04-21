@@ -15,10 +15,15 @@ def show_window_screen(window):
     for widget in window.winfo_children():
         widget.destroy()
 
-    def show_authentication_screen():
+    def show_rus_authentication_screen():
         from ..authentication.gui import show_window_screen as show_authentication_screen
         show_authentication_screen(window)
-        print("Authentication showed")
+        print("Authentication RUS showed")
+
+    def show_eng_authentication_screen():
+        from ..eng_authentication.gui import show_window_screen as show_authentication_screen
+        show_authentication_screen(window)
+        print("Authentication ENG showed")
 
     canvas = Canvas(
         window,
@@ -42,7 +47,7 @@ def show_window_screen(window):
     image_image_1 = PhotoImage(
         file=relative_to_assets("image_1.png"))
     image_1 = canvas.create_image(
-        510.73681640625,
+        506.73681640625,
         265.7624855041504,
         image=image_image_1
     )
@@ -50,50 +55,31 @@ def show_window_screen(window):
     button_image_1 = PhotoImage(
         file=relative_to_assets("button_1.png"))
     button_1 = Button(
-        window,
         image=button_image_1,
         borderwidth=0,
         highlightthickness=0,
-        command=lambda: print("Kyrgyz"),
+        command=lambda: show_rus_authentication_screen(),
         relief="flat"
     )
     button_1.place(
         x=0.0,
-        y=262.0,
-        width=267.0,
-        height=87.0
+        y=309.0,
+        width=260.0,
+        height=90.0
     )
 
     button_image_2 = PhotoImage(
         file=relative_to_assets("button_2.png"))
     button_2 = Button(
-        window,
         image=button_image_2,
         borderwidth=0,
         highlightthickness=0,
-        command=lambda: show_authentication_screen(),
+        command=lambda: show_eng_authentication_screen(),
         relief="flat"
     )
     button_2.place(
-        x=0.0,
-        y=445.0,
-        width=260.0,
-        height=90.0
-    )
-
-    button_image_3 = PhotoImage(
-        file=relative_to_assets("button_3.png"))
-    button_3 = Button(
-        window,
-        image=button_image_3,
-        borderwidth=0,
-        highlightthickness=0,
-        command=lambda: print("English"),
-        relief="flat"
-    )
-    button_3.place(
         x=764.0,
-        y=262.0,
+        y=309.0,
         width=260.0,
         height=87.0
     )
@@ -101,7 +87,5 @@ def show_window_screen(window):
     canvas.image_1 = image_image_1
     canvas.button_1 = button_1
     canvas.button_2 = button_2
-    canvas.button_3 = button_3
     canvas.button_1 = button_image_1
     canvas.button_2 = button_image_2
-    canvas.button_3 = button_image_3
