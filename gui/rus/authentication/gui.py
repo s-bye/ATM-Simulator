@@ -3,13 +3,14 @@ from pathlib import Path
 # from tkinter import *
 # Explicit imports to satisfy Flake8
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
+from tkinter.font import Font
 from classes.dao.userDAO import UserDAO
 from ..menu.gui import show_window_screen as show_menu_screen
 from ..access_denied.gui import show_window_screen as show_access_denied_screen
 
 OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / Path("assets")
-
+font_path = Path(".../assets/Merriweather.ttf")
 
 def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
@@ -30,7 +31,6 @@ def show_window_screen(window):
     vcmd_card_number = window.register(limit_card_number_length)
     vcmd_pin = window.register(limit_pin_length)
 
-    # Initialize warning message IDs
     window.card_warning_id = None
     window.pin_warning_id = None
 
@@ -145,6 +145,7 @@ def show_window_screen(window):
         bg="#D6D6D6",
         fg="#000716",
         validate="key",
+        font=("Merriweather", 24),
         validatecommand=(vcmd_card_number, "%P"),
         highlightthickness=0
     )
@@ -156,11 +157,9 @@ def show_window_screen(window):
     )
 
     entry_1.configure(
-        font=("Merriweather", 24),
         justify="center"
     )
-    entry_1.bind("<Key>", clear_card_warning)  # Clear warning on typing
-
+    entry_1.bind("<Key>", clear_card_warning)
     entry_image_2 = PhotoImage(
         file=relative_to_assets("entry_2.png"))
     entry_bg_2 = canvas.create_image(
@@ -173,6 +172,7 @@ def show_window_screen(window):
         bg="#D6D6D6",
         fg="#000716",
         validate="key",
+        font=("Merriweather", 24),
         validatecommand=(vcmd_pin, "%P"),
         highlightthickness=0
     )

@@ -2,15 +2,17 @@ from pathlib import Path
 
 # from tkinter import *
 # Explicit imports to satisfy Flake8
-from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
-
+from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, font
+import ctypes
 
 OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / Path("assets")
 
-
 def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
+
+def limit_amount_length(value):
+    return len(value) <= 5
 
 def show_window_screen(window):
     from classes.dao.transactionsDAO import TransactionDAO
@@ -26,6 +28,8 @@ def show_window_screen(window):
 
     for widget in window.winfo_children():
         widget.destroy()
+
+    vcmd_amount = window.register(limit_amount_length)
 
     trans_dao = TransactionDAO()
     user_dao = UserDAO()
@@ -95,6 +99,9 @@ def show_window_screen(window):
         bd=0,
         bg="#D6D6D6",
         fg="#000716",
+        validate="key",
+        font=("Merriweather", 24),
+        validatecommand=(vcmd_amount, "%P"),
         highlightthickness=0
     )
     entry_1.place(
@@ -102,6 +109,10 @@ def show_window_screen(window):
         y=258.0,
         width=353.0,
         height=82.0
+    )
+
+    entry_1.configure(
+        justify="center"
     )
 
     image_image_1 = PhotoImage(

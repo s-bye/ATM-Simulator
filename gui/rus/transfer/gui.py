@@ -136,6 +136,7 @@ def show_window_screen(window):
         bd=0,
         bg="#D6D6D6",
         fg="#000716",
+        font=("Merriweather", 24),
         highlightthickness=0
     )
     entry_1.place(
@@ -143,6 +144,9 @@ def show_window_screen(window):
         y=261.0,
         width=353.0,
         height=82.0
+    )
+    entry_1.configure(
+        justify="center"
     )
 
     entry_image_2 = PhotoImage(
@@ -156,6 +160,7 @@ def show_window_screen(window):
         bd=0,
         bg="#D6D6D6",
         fg="#000716",
+        font=("Merriweather", 24),
         highlightthickness=0
     )
     entry_2.place(
@@ -163,6 +168,9 @@ def show_window_screen(window):
         y=400.0,
         width=353.0,
         height=82.0
+    )
+    entry_2.configure(
+        justify="center"
     )
 
     canvas.image_1 = image_image_1
