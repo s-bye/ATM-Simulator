@@ -5,6 +5,7 @@ from pathlib import Path
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
 
 
+
 OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / Path("assets")
 
@@ -13,21 +14,48 @@ def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
 
 def show_window_screen(window):
+    from classes.dao.transactionsDAO import TransactionDAO
+    from classes.dao.userDAO import UserDAO
+    from classes.dao.loggingDAO import LoggingDAO
+    from ..transaction_ok.gui import show_window_screen as show_transaction_ok_screen
+    from ..transaction_denied.gui import show_window_screen as show_transaction_denied_screen
+    from ..menu.gui import show_window_screen as show_menu_screen
+
     for widget in window.winfo_children():
         widget.destroy()
 
+    trans_dao = TransactionDAO()
+    user_dao = UserDAO()
+    log_dao = LoggingDAO()
+
+    card = window.card_number
+    user = user_dao.get_user_by_card(card)
+
     def escape_button(event):
         window.unbind("<Escape>")
-        from ..menu.gui import show_window_screen as show_menu_screen
         show_menu_screen(window)
         print("Menu screen showed")
 
     def enter_button(event):
         window.unbind("<Return>")
-        from ..transaction_ok.gui import show_window_screen as show_transaction_ok_screen
-        #TODO implement functionality for deposit with DB
-        show_transaction_ok_screen(window)
-        print("Transaction OK screen showed")
+        try:
+            amount = float(entry_1.get())
+            if amount <= 0:
+                raise ValueError("Amount must be positive")
+            result = trans_dao.deposit(card, amount)
+
+            if "successful" in result:
+                log_dao.add_log(user.user_id, f"deposit {amount}")
+                show_transaction_ok_screen(window)
+                print("Deposit successful")
+            else:
+                log_dao.add_log(user.user_id, f"Deposit failed: {amount}")
+                show_transaction_ok_screen(window)
+                print("Deposit failed")
+
+        except Exception as e:
+            print("Error in input: ", e)
+            show_transaction_ok_screen(window)
 
     window.bind("<Escape>", escape_button)
     window.bind("<Return>", enter_button)
@@ -71,6 +99,7 @@ def show_window_screen(window):
         bd=0,
         bg="#D6D6D6",
         fg="#000716",
+        font=("Merriweather", 24),
         highlightthickness=0
     )
     entry_1.place(
@@ -78,6 +107,9 @@ def show_window_screen(window):
         y=258.0,
         width=353.0,
         height=82.0
+    )
+    entry_1.configure(
+        justify="center"
     )
 
     image_image_1 = PhotoImage(

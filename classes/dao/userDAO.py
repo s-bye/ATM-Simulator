@@ -58,6 +58,14 @@ class UserDAO(BaseDAO):
         conn.commit()
         conn.close()
 
+    def update_pin(self, user_id, new_pin):
+        conn = self.connect_db()
+        cursor = conn.cursor()
+
+        cursor.execute("UPDATE users SET pin_code = ? WHERE user_id = ?", (new_pin, user_id))
+        conn.commit()
+        conn.close()
+
     def get_balance(self, card_number):
         conn = self.connect_db()
         cursor = conn.cursor()

@@ -13,18 +13,19 @@ def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
 
 def show_window_screen(window):
+    from ..menu.gui import show_window_screen as show_menu_screen
+
     for widget in window.winfo_children():
         widget.destroy()
 
+
     def escape_button(event):
         window.unbind("<Escape>")
-        from ..menu.gui import show_window_screen as show_menu_screen
         show_menu_screen(window)
         print("Menu screen showed")
 
     def enter_button(event):
         window.unbind("<Return>")
-        from ..menu.gui import show_window_screen as show_menu_screen
         show_menu_screen(window)
         print("Menu screen showed")
 
