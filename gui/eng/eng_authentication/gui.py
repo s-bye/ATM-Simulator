@@ -113,7 +113,7 @@ def show_window_screen(window):
 
     def escape_button(event):
         window.unbind("<Escape>")
-        from ..idle.gui import show_window_screen as show_idle_screen
+        from gui.rus.idle.gui import show_window_screen as show_idle_screen
         show_idle_screen(window)
         print("IDLE screen showed")
 

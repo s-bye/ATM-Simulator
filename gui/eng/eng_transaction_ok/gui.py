@@ -3,6 +3,7 @@ from pathlib import Path
 # from tkinter import *
 # Explicit imports to satisfy Flake8
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
+from gui.rus.idle.gui import show_window_screen as show_idle_screen
 
 
 OUTPUT_PATH = Path(__file__).parent
@@ -42,5 +43,7 @@ def show_window_screen(window):
         274.762451171875,
         image=image_image_1
     )
+
+    window.after(5000, lambda: show_idle_screen(window))
 
     canvas.image_1 = image_image_1
