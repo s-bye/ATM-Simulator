@@ -156,31 +156,27 @@ The `Model` class is responsible for managing the business logic of the applicat
 
 ## 📊 UML Diagrams
 
-![UML Class Diagram](./images/uml_class_diagram.png)
+![UML Class Diagram](https://raw.githubusercontent.com/s-bye/ATM-Simulator/refs/heads/main/screenshots/photo_2025-04-22_15-16-19.jpg)
 
-## 📊 Database Reports
 
-1. **Checking if the product does not have a category.**
-   ![Category Check](./images/category_check.png)
+1. **Table users**
+   ![](https://raw.githubusercontent.com/s-bye/ATM-Simulator/refs/heads/feature/screenshots/img.png)
 
-2. **Displaying each category, number of products in each category, and average price in each category.**
-   ![Category Report](./images/category_report.png)
+2. **Displaying each users, where balance > 2000**
+   ![](https://raw.githubusercontent.com/s-bye/ATM-Simulator/refs/heads/feature/screenshots/img_1.png)
 
-3. **Displaying products with a price higher than 1000.**
-   ![High Price Products](./images/high_price_products.png)
+3. **Displaying users ordered by balance**
+   ![](https://raw.githubusercontent.com/s-bye/ATM-Simulator/refs/heads/feature/screenshots/img_2.png)
 
-4. **Counting domains of email addresses.**
-   ![Email Domain Count](./images/email_domain_count.png)
+4. **Displaying logs table where from user taked money.**
+   ![](https://raw.githubusercontent.com/s-bye/ATM-Simulator/refs/heads/feature/screenshots/img_4.png)
 
-5. **Counting the number of users.**
-   ![User Count](./images/user_count.png)
+5. **User's transaction history spended**
+   ![](https://raw.githubusercontent.com/s-bye/ATM-Simulator/refs/heads/feature/screenshots/img_5.png)
 
 ## ⚙️ Installation and Usage
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/argenkuz/ATM-Simulator.git
-ATM Simulator
-
-This repository contains an ATM Simulator built using Python. The project implements a Graphical User Interface (GUI) with functionality for user authentication, balance management, money transfers, deposits, withdrawals, and more.
+   git clone https://github.com/s-bye/ATM-Simulator.git
 
