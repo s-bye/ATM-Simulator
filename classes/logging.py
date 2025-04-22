@@ -1,5 +1,5 @@
 class Logging:
-    def __init__(self, log_id, user_id, action, timestamp):
+    def __init__(self, log_id, user_id, action, timestamp=None):
         self.log_id = log_id
         self.user_id = user_id
         self.action = action
