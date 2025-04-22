@@ -156,7 +156,7 @@ The `Model` class is responsible for managing the business logic of the applicat
 
 ## 📊 UML Diagrams
 
-![UML Class Diagram](./images/uml_class_diagram.png)
+![UML Class Diagram](https://raw.githubusercontent.com/s-bye/ATM-Simulator/refs/heads/main/screenshots/photo_2025-04-22_15-16-19.jpg)
 
 
 1. **Table users**
