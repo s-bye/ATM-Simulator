@@ -92,3 +92,32 @@ class Model:
         self.logging_dao.add_log(user_id, action)
     def update_pin(self, user_id, new_pin):
         self.user_dao.update_pin(user_id, new_pin)
+
+    def transfer_funds(self, sender_card, receiver_card, amount):
+        sender = self.user_dao.get_user_by_card(sender_card)
+        receiver = self.user_dao.get_user_by_card(receiver_card)
+
+        if not sender or not receiver:
+            return "Invalid card number(s)"
+
+        sender_balance = self.user_dao.get_balance(sender_card)
+        if sender_balance < amount:
+            return "Insufficient funds"
+
+        receiver_balance = self.user_dao.get_balance(receiver_card)
+        new_sender_balance = sender_balance - amount
+        new_receiver_balance = receiver_balance + amount
+
+        self.transaction_dao.add_transaction(sender.user_id, 'Transfer', -amount)
+        self.transaction_dao.add_transaction(receiver.user_id, 'Transfer', amount)
+
+        self.user_dao.update_balance(sender.user_id, new_sender_balance)
+        self.user_dao.update_balance(receiver.user_id, new_receiver_balance)
+
+        self.logging_dao.add_log(sender.user_id, f"Transferred {amount} to {receiver_card}")
+        self.logging_dao.add_log(receiver.user_id, f"Received {amount} from {sender_card}")
+
+        return f"Transfer of {amount} from {sender_card} to {receiver_card} successful"
+
+    def get_balance(self, card_number):
+        return self.user_dao.get_balance(card_number)
