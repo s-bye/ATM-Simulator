@@ -43,7 +43,7 @@ def show_window_screen(window):
             437.0,
             text=message,
             font=("Merriweather", 14),
-            fill="#FF0000",
+            fill="#FF9292",
             anchor="center"
         )
 
@@ -60,7 +60,7 @@ def show_window_screen(window):
             580.0,
             text=message,
             font=("Merriweather", 14),
-            fill="#FF0000",
+            fill="#FF9292",
             anchor="center"
         )
 
