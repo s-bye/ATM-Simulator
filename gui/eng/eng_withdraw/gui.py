@@ -4,10 +4,10 @@ from classes.dao.transactionsDAO import TransactionDAO
 from classes.dao.userDAO import UserDAO
 from classes.dao.loggingDAO import LoggingDAO
 
-from ..eng_transaction_ok.gui import show_window_screen as show_transaction_ok_screen
-from ..eng_transaction_denied.gui import show_window_screen as show_transaction_denied_screen
-from ..eng_another_amount.gui import show_window_screen as show_another_amount_screen
-from ..eng_menu.gui import show_window_screen as show_menu_screen
+from gui.eng.eng_transaction_ok.gui import show_window_screen as show_transaction_ok_screen
+from gui.eng.eng_transaction_denied.gui import show_window_screen as show_transaction_denied_screen
+from gui.eng.eng_another_amount.gui import show_window_screen as show_another_amount_screen
+from gui.eng.eng_menu.gui import show_window_screen as show_menu_screen
 from model import Model
 
 # from tkinter import *

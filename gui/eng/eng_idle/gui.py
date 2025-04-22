@@ -3,7 +3,7 @@ from pathlib import Path
 # from tkinter import *
 # Explicit imports to satisfy Flake8
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
-from ..languages.gui import show_window_screen as show_languages_screen
+from gui.rus.languages.gui import show_window_screen as show_languages_screen
 
 OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / Path("assets")

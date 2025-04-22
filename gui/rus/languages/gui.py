@@ -21,7 +21,7 @@ def show_window_screen(window):
         print("Authentication RUS showed")
 
     def show_eng_authentication_screen():
-        from ..eng_authentication.gui import show_window_screen as show_authentication_screen
+        from gui.eng.eng_authentication.gui import show_window_screen as show_authentication_screen
         show_authentication_screen(window)
         print("Authentication ENG showed")
 

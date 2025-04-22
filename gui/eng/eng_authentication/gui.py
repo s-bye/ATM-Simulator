@@ -5,8 +5,8 @@ from pathlib import Path
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
 from tkinter.font import Font
 from classes.dao.userDAO import UserDAO
-from ..eng_menu.gui import show_window_screen as show_menu_screen
-from ..eng_access_denied.gui import show_window_screen as show_access_denied_screen
+from gui.eng.eng_menu.gui import show_window_screen as show_menu_screen
+from gui.eng.eng_access_denied.gui import show_window_screen as show_access_denied_screen
 from model import Model
 
 OUTPUT_PATH = Path(__file__).parent

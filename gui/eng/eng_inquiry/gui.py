@@ -10,7 +10,7 @@ def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
 
 def show_window_screen(window):
-    from ..eng_menu.gui import show_window_screen as show_menu_screen
+    from gui.eng.eng_menu.gui import show_window_screen as show_menu_screen
 
     for widget in window.winfo_children():
         widget.destroy()

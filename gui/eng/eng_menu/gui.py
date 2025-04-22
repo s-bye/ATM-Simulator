@@ -16,32 +16,32 @@ def show_window_screen(window):
         widget.destroy()
 
     def withdraw_button():
-        from ..eng_withdraw.gui import show_window_screen as show_withdraw_screen
+        from gui.eng.eng_withdraw.gui import show_window_screen as show_withdraw_screen
         show_withdraw_screen(window)
         print("Withdraw showed")
 
     def deposit_button():
-        from ..eng_deposit.gui import show_window_screen as show_deposit_screen
+        from gui.eng.eng_deposit.gui import show_window_screen as show_deposit_screen
         show_deposit_screen(window)
         print("Deposit showed")
 
     def transfer_button():
-        from ..eng_transfer.gui import show_window_screen as show_transfer_screen
+        from gui.eng.eng_transfer.gui import show_window_screen as show_transfer_screen
         show_transfer_screen(window)
         print("Transfer showed")
 
     def change_pin_button():
-        from ..eng_change_pin.gui import show_window_screen as show_change_pin_screen
+        from gui.eng.eng_change_pin.gui import show_window_screen as show_change_pin_screen
         show_change_pin_screen(window)
         print("Change PIN showed")
 
     def inquiry_button():
-        from ..eng_inquiry.gui import show_window_screen as show_inquiry_screen
+        from gui.eng.eng_inquiry.gui import show_window_screen as show_inquiry_screen
         show_inquiry_screen(window)
         print("Inquiry showed")
 
     def idle_button():
-        from ..idle.gui import show_window_screen as show_idle_screen
+        from gui.rus.idle.gui import show_window_screen as show_idle_screen
         show_idle_screen(window)
         print("Idle showed")
 
