@@ -43,4 +43,6 @@ def show_window_screen(window):
         image=image_image_1
     )
 
+    window.after(5000, lambda: show_idle_screen(window))
+
     canvas.image_1 = image_image_1
