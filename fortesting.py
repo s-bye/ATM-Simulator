@@ -18,9 +18,25 @@ logs_dao.delete_all_logs()
 
 # --- 1. Добавим пользователя ---
 print("🟢 1. Добавление пользователя")
-new_user = User(None, "Эльдияр", 1234567890123456, 1234, 1000.0)
+new_user = User(None, "Baiastan", 1234567890123456, 1234, 1000.0)
 user_dao.add_user(new_user)
 print("✅ Пользователь добавлен.")
+user2 = User(None, "Imanbek", 1234567890123457, 2345, 1250.0)
+user3 = User(None, 'Bektur', 1234567890123458, 3456, 1500.0)
+user4 = User(None, "Baisal", 1234567890123459, 4567, 1750.0)
+user5 = User(None, "Nurali", 1234567890123460, 5678, 2000.0)
+user6 = User(None, "Marlen", 1234567890123461, 6789, 2250.0)
+user7 = User(None, "Aisulu", 1234567890123462, 7890, 2500.0)
+user8 = User(None, "Alina", 1234567890123463, 8901, 2750.0)
+user9 = User(None, "Diana", 1234567890123464, 9012, 3000.0)
+user_dao.add_user(user2)
+user_dao.add_user(user3)
+user_dao.add_user(user4)
+user_dao.add_user(user5)
+user_dao.add_user(user6)
+user_dao.add_user(user7)
+user_dao.add_user(user8)
+user_dao.add_user(user9)
 
 # --- 2. Получим пользователя по номеру карты ---
 print("\n🟢 2. Получение пользователя по карте")
@@ -44,7 +60,7 @@ print(result)
 
 # --- 6. Добавим второго пользователя для перевода ---
 print("\n🟢 6. Добавим второго пользователя")
-receiver = User(None, "Второй", 9999888877776666, 4321, 300.0)
+receiver = User(None, "Abai", 9999888877776666, 4321, 300.0)
 user_dao.add_user(receiver)
 
 # --- 7. Перевод средств ---
@@ -73,10 +89,10 @@ print("Sender:", user_dao.get_user_by_card(1234567890123456).get_balance())
 print("Receiver:", user_dao.get_user_by_card(9999888877776666).get_balance())
 
 # --- 12. Очистка данных после теста ---
-print("\n🧹 Очистка всех данных (тест)")
+"""print("\n🧹 Очистка всех данных (тест)")
 user_dao.delete_all_users()
 trans_dao.delete_all_transactions()
 logs_dao.delete_all_logs()
 print("✅ Все данные удалены.")
 
-# input("Нажми Enter, чтобы выйти...")
+# input("Нажми Enter, чтобы выйти...")"""
